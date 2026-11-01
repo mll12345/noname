@@ -1,0 +1,866 @@
+/* 新月杀 Web —— 牌桌样式
+   深色木质牌桌，红/金配色，贴近原版气质 */
+
+:root {
+  --bg: #14100c;
+  --bg2: #1d1712;
+  --panel: rgba(30, 24, 18, 0.92);
+  --panel-2: rgba(44, 35, 26, 0.9);
+  --line: rgba(196, 160, 96, 0.28);
+  --gold: #d8b46a;
+  --gold-dim: #8a7343;
+  --text: #ece3d2;
+  --text-dim: #a2957f;
+  --red: #c0392b;
+  --red-bright: #ff5a44;
+  --green: #3f9a5a;
+  --blue: #4a7fbf;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  font-size: 14px;
+  user-select: none;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% 30%, #2a2118 0%, #14100c 65%, #0b0806 100%);
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------- 载入页 */
+
+#boot {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  z-index: 100;
+  background: radial-gradient(circle at 50% 40%, #2a2118 0%, #0b0806 75%);
+  transition: opacity 0.5s;
+}
+
+#boot.gone { opacity: 0; pointer-events: none; }
+
+.boot-logo {
+  font-family: "STKaiti", "KaiTi", "Kaiti SC", serif;
+  font-size: 64px;
+  letter-spacing: 10px;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(216, 180, 106, 0.35);
+}
+
+.boot-sub { color: var(--text-dim); letter-spacing: 3px; font-size: 12px; }
+
+.boot-bar {
+  width: min(340px, 70vw);
+  height: 3px;
+  background: rgba(216, 180, 106, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.boot-bar > i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  transition: width 0.3s;
+}
+
+#boot-status { font-size: 12px; color: var(--text-dim); min-height: 18px; }
+
+/* ---------------------------------------------------------------- 开始页 */
+
+#start {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  z-index: 90;
+  background: radial-gradient(circle at 50% 35%, #2a2118 0%, #0b0806 75%);
+}
+
+#start.show { display: flex; }
+
+.start-title {
+  font-family: "STKaiti", "KaiTi", "Kaiti SC", serif;
+  font-size: 46px;
+  letter-spacing: 8px;
+  color: var(--gold);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.start-note { color: var(--text-dim); font-size: 12px; text-align: center; max-width: 320px; line-height: 1.7; }
+
+.mode-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+.mode-btn {
+  padding: 14px 22px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 15px;
+  transition: 0.15s;
+  min-width: 84px;
+}
+
+.mode-btn.on {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(216, 180, 106, 0.12);
+  box-shadow: 0 0 18px rgba(216, 180, 106, 0.18);
+}
+
+.big-btn {
+  padding: 15px 60px;
+  border-radius: 12px;
+  border: 1px solid var(--gold);
+  color: #1a1410;
+  background: linear-gradient(180deg, #e8c988, #c39c50);
+  font-size: 17px;
+  letter-spacing: 4px;
+  font-weight: 600;
+  box-shadow: 0 6px 22px rgba(195, 156, 80, 0.3);
+}
+
+.big-btn:active { transform: translateY(1px); }
+
+/* ---------------------------------------------------------------- 牌桌 */
+
+#table {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  padding: 8px 8px calc(8px + var(--safe-b));
+  gap: 6px;
+}
+
+#table.show { display: flex; }
+
+/* 对手区 */
+#seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  align-content: flex-start;
+  flex: 0 1 auto;
+  overflow: visible;
+}
+
+.seat {
+  position: relative;
+  width: 92px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  overflow: hidden;
+  transition: 0.15s;
+  flex: 0 0 auto;
+}
+
+.seat .face {
+  width: 100%;
+  height: 96px;
+  background: #241c14 center/cover no-repeat;
+  position: relative;
+}
+
+.seat .face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(10, 7, 4, 0.92) 100%);
+}
+
+.seat .nm {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+  z-index: 2;
+  padding: 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.seat .role {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 3;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.role.lord { background: #b8873a; }
+.role.loyalist { background: #b8873a; }
+.role.rebel { background: #8e2f2f; }
+.role.renegade { background: #2f5b8e; }
+
+.seat .handcount {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 3;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.65);
+  color: var(--gold);
+  font-size: 11px;
+  text-align: center;
+}
+
+.seat .hpbar {
+  display: flex;
+  gap: 2px;
+  padding: 3px 4px 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hpdot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #5a2020;
+}
+
+.hpdot.on { background: #d9463a; box-shadow: 0 0 4px rgba(217, 70, 58, 0.8); }
+.hpdot.shield { background: #c9a227; box-shadow: 0 0 4px rgba(201, 162, 39, 0.8); }
+
+.seat .gear {
+  display: flex;
+  gap: 2px;
+  padding: 2px 3px 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 14px;
+}
+
+.gear i {
+  font-style: normal;
+  font-size: 9px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  background: rgba(216, 180, 106, 0.16);
+  color: var(--gold);
+  border: 1px solid rgba(216, 180, 106, 0.25);
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seat .marks {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  padding: 0 3px 3px;
+  justify-content: center;
+}
+
+.marks span {
+  font-size: 9px;
+  color: #d9c9a8;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+.seat.dead { filter: grayscale(1) brightness(0.55); }
+
+.seat.current {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold), 0 0 16px rgba(216, 180, 106, 0.4);
+}
+
+/* 可选目标 */
+.seat.targetable { cursor: pointer; }
+.seat.targetable .face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--red-bright);
+  border-radius: 8px;
+  animation: pulse 1.1s infinite;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.seat.selected {
+  border-color: var(--red-bright);
+  box-shadow: 0 0 0 2px var(--red-bright), 0 0 22px rgba(255, 90, 68, 0.55);
+  transform: translateY(-3px);
+}
+
+.seat.selected .face::before { display: none; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+/* 中央区 */
+#center {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 60px;
+  padding: 4px;
+}
+
+#prompt {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 92vw;
+  text-shadow: 0 1px 4px #000;
+  min-height: 20px;
+}
+
+#prompt em { color: var(--gold); font-style: normal; }
+#prompt .warn { color: var(--red-bright); }
+
+#piles {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+#piles:empty { display: none; }
+
+/* 非手牌区的可选卡（弃牌堆、别人装备区） */
+#pick {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+#pick:empty { display: none; }
+
+#actions { display: flex; gap: 10px; align-items: center; }
+
+.act {
+  padding: 9px 26px;
+  border-radius: 9px;
+  font-size: 14px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+
+.act.ok { border-color: var(--gold); color: #1a1410; background: linear-gradient(180deg, #e8c988, #c39c50); font-weight: 600; }
+.act.ok:disabled { opacity: 0.35; filter: grayscale(0.7); }
+.act.end { border-color: #7a5a2a; color: var(--gold); }
+.act.cancel:disabled { opacity: 0.3; }
+.act:active { transform: translateY(1px); }
+
+/* 顶栏 */
+#topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  height: 26px;
+}
+
+#mode-name {
+  margin-right: auto;
+  font-size: 11px;
+  color: var(--gold-dim);
+  letter-spacing: 2px;
+}
+
+#trust-btn,
+#log-toggle {
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#trust-btn:active,
+#log-toggle:active { transform: translateY(1px); }
+
+/* 我的区域 */
+#me {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+#me-info {
+  width: 100px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+#me-info .face { height: 92px; background: #241c14 center/cover no-repeat; position: relative; }
+#me-info .face::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(10, 7, 4, 0.9));
+}
+#me-info .nm {
+  position: absolute; bottom: 2px; left: 0; right: 0;
+  text-align: center; font-size: 11px; z-index: 2;
+  text-shadow: 0 1px 3px #000;
+}
+#me-info .hpbar { display: flex; gap: 2px; padding: 4px; flex-wrap: wrap; justify-content: center; }
+
+#me-info.targetable { cursor: pointer; border-color: var(--red-bright); animation: pulse 1.1s infinite; }
+#me-info.selected { border-color: var(--red-bright); box-shadow: 0 0 0 2px var(--red-bright); }
+
+#hand-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#skills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  min-height: 0;
+}
+
+.skill-btn {
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.skill-btn.on {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(216, 180, 106, 0.14);
+}
+
+.skill-btn.selected {
+  border-color: var(--red-bright);
+  color: #fff;
+  background: rgba(255, 90, 68, 0.25);
+}
+
+#hand {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 2px 4px;
+  scrollbar-width: none;
+}
+
+#hand::-webkit-scrollbar { display: none; }
+
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 62px;
+  height: 88px;
+  border-radius: 6px;
+  border: 1px solid #3a2f22;
+  background: #f2e9d8;
+  color: #1a1410;
+  overflow: hidden;
+  transition: 0.13s;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+.card .art {
+  position: absolute;
+  inset: 0;
+  background: center/cover no-repeat;
+}
+
+.card .cn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 11px;
+  padding: 2px 0 3px;
+  background: linear-gradient(180deg, rgba(242, 233, 216, 0), rgba(242, 233, 216, 0.95) 40%);
+  color: #1a1410;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card .sn {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  z-index: 2;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff;
+}
+
+.card.red .sn { color: #c0392b; }
+.card.black .sn { color: #1a1410; }
+
+.card.selectable { cursor: pointer; }
+.card.selectable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--red-bright);
+  border-radius: 6px;
+  animation: pulse 1.1s infinite;
+}
+
+.card.selected {
+  transform: translateY(-10px);
+  box-shadow: 0 0 0 2px var(--red-bright), 0 8px 20px rgba(255, 90, 68, 0.5);
+}
+
+.card.selected::after { display: none; }
+
+.card.disabled { filter: grayscale(0.85) brightness(0.6); }
+
+.card.dim { opacity: 0.75; }
+
+/* 特殊技能小条 */
+#special {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 2px;
+}
+
+.special-btn {
+  padding: 5px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--gold-dim);
+  background: rgba(216, 180, 106, 0.1);
+  color: var(--gold);
+  font-size: 12px;
+}
+
+/* 战报面板 */
+#log {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(300px, 82vw);
+  background: rgba(12, 9, 6, 0.97);
+  border-left: 1px solid var(--line);
+  transform: translateX(100%);
+  transition: transform 0.25s;
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+
+#log.open { transform: translateX(0); }
+
+#log h4 {
+  margin: 0;
+  padding: 12px 14px 8px;
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--line);
+}
+
+#log-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 14px 20px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: #cbbfa8;
+}
+
+#log-body p { margin: 0 0 3px; }
+#log-body .hl { color: var(--gold); }
+#log-body .dmg { color: #e8705f; }
+#log-body .heal { color: #6fbf87; }
+
+#log-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: var(--text-dim);
+  font-size: 18px;
+  padding: 4px 8px;
+}
+
+/* 结算 */
+#over {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 60;
+  background: rgba(8, 6, 4, 0.88);
+  backdrop-filter: blur(4px);
+}
+
+#over.show { display: flex; }
+
+#over-title {
+  font-family: "STKaiti", "KaiTi", serif;
+  font-size: 56px;
+  letter-spacing: 12px;
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(216, 180, 106, 0.4);
+}
+
+#over-title.lose { color: #a08f7a; text-shadow: none; }
+
+#over-sub { color: var(--text-dim); font-size: 13px; letter-spacing: 2px; }
+
+/* 提示条 */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(180px + var(--safe-b));
+  transform: translateX(-50%) translateY(10px);
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 13px;
+  opacity: 0;
+  transition: 0.25s;
+  pointer-events: none;
+  z-index: 70;
+  max-width: 86vw;
+  text-align: center;
+}
+
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* 横屏 / 大屏 */
+@media (min-width: 720px) {
+  .seat { width: 108px; }
+  .seat .face { height: 112px; }
+  .card { width: 72px; height: 102px; }
+  #me-info { width: 120px; }
+  #me-info .face { height: 108px; }
+  #table { padding: 12px 16px; }
+}
+
+/* 人多的时候座位缩一圈，否则两行放不下 */
+#seats.dense .seat { width: 66px; }
+#seats.dense .seat .face { height: 72px; }
+#seats.dense .seat .nm { font-size: 10px; }
+#seats.dense .hpdot { width: 6px; height: 6px; }
+#seats.dense .gear i { font-size: 8px; max-width: 44px; }
+
+/* 牌背 */
+.card.back {
+  background:
+    repeating-linear-gradient(45deg, #2a3a52 0 4px, #223047 4px 8px);
+  border-color: #16202f;
+}
+.card.back .cn { background: none; color: #8fa6c4; }
+
+/* ---------------------------------------------------------------- 弹窗 */
+
+#dlg {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 80;
+  background: rgba(6, 4, 3, 0.78);
+  backdrop-filter: blur(3px);
+}
+
+#dlg.show { display: flex; }
+
+.dlg-box {
+  width: min(560px, 100%);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #241c15, #17110c);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.dlg-prompt {
+  padding: 14px 16px 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.dlg-prompt em { color: var(--gold); font-style: normal; }
+
+.dlg-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 14px 16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dlg-foot {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px 16px 16px;
+}
+
+.dlg-foot:empty { display: none; }
+
+/* 选项按钮 */
+.dlg-opt {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.5;
+  transition: 0.13s;
+}
+
+.dlg-opt.on {
+  border-color: var(--gold);
+  background: rgba(216, 180, 106, 0.16);
+  color: var(--gold);
+}
+
+.dlg-opt:active { transform: translateY(1px); }
+
+/* 选牌 */
+.dlg-cards {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dlg-cards .card { width: 66px; height: 94px; cursor: pointer; }
+
+/* 选将 */
+.dlg-gens {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gen {
+  width: 96px;
+  padding: 0;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  overflow: hidden;
+  transition: 0.13s;
+}
+
+.gen .pic {
+  display: block;
+  width: 100%;
+  height: 112px;
+  background: #241c14 center/cover no-repeat;
+}
+
+.gen .gname {
+  display: block;
+  padding: 5px 2px 6px;
+  font-size: 12px;
+  color: var(--text);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gen.on {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold), 0 0 18px rgba(216, 180, 106, 0.35);
+}
+
+.gen.on .gname { color: var(--gold); }

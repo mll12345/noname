@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>新月杀 · 网页版</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#14100c" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="新月杀" />
+<link rel="manifest" href="pwa-manifest.json" />
+<link rel="apple-touch-icon" href="assets/icon-180.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- 载入 -->
+<div id="boot">
+  <div class="boot-logo">新月杀</div>
+  <div class="boot-sub">F R E E K I L L · W E B</div>
+  <div class="boot-bar"><i id="boot-progress"></i></div>
+  <div id="boot-status">正在准备…</div>
+</div>
+
+<!-- 开始 -->
+<div id="start">
+  <div class="start-title">新月杀</div>
+  <div class="start-note">由 FreeKill 的 Lua 内核驱动，整套规则、AI 与判定原样跑在浏览器里。<br />你扮演主公，其余席位由 AI 托管。</div>
+  <div class="mode-row" id="count-row">
+    <button class="mode-btn" data-n="2">2 人</button>
+    <button class="mode-btn" data-n="3">3 人</button>
+    <button class="mode-btn on" data-n="5">5 人</button>
+    <button class="mode-btn" data-n="8">8 人</button>
+  </div>
+  <button class="big-btn" id="start-btn">开 始</button>
+</div>
+
+<!-- 牌桌 -->
+<div id="table">
+  <div id="topbar">
+    <span id="mode-name">身份场</span>
+    <button id="log-toggle">战报</button>
+    <button id="trust-btn">托管</button>
+  </div>
+
+  <div id="seats"></div>
+
+  <div id="center">
+    <div id="prompt"></div>
+    <div id="piles"></div>
+    <div id="pick"></div>
+    <div id="actions"></div>
+  </div>
+
+  <div id="me">
+    <div id="me-info">
+      <div class="face" id="me-face"><div class="nm" id="me-name"></div></div>
+      <div class="hpbar" id="me-hp"></div>
+    </div>
+    <div id="hand-wrap">
+      <div id="skills"></div>
+      <div id="special"></div>
+      <div id="hand"></div>
+    </div>
+  </div>
+
+  <div id="log">
+    <h4>战 报</h4>
+    <button id="log-close">×</button>
+    <div id="log-body"></div>
+  </div>
+</div>
+
+<!-- 结算 -->
+<div id="over">
+  <div id="over-title">胜</div>
+  <div id="over-sub"></div>
+  <button class="big-btn" id="again-btn">再 来 一 局</button>
+</div>
+
+<div id="toast"></div>
+
+<script src="wasmoon/index.js"></script>
+<script src="assets_index.js"></script>
+<script src="lua_bundle.js"></script>
+<script src="loader.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
