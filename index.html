@@ -1,6 +1,88 @@
 <!doctype html>
 
 <head>
+  <meta charset="UTF-8" />
+  <!-- ==== PWA / iOS 独立应用 ==== -->
+  <link rel="manifest" href="./pwa-manifest.json" />
+  <meta name="theme-color" content="#12100e" />
+  <meta name="application-name" content="无名杀" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="无名杀" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
+  <style>
+    html, body { overscroll-behavior: none; }
+    body { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+
+    /* iOS「添加到主屏幕」引导条 */
+    #nn-ios-hint {
+      position: fixed !important;
+      left: 50% !important;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+      transform: translateX(-50%) !important;
+      z-index: 2147483647 !important;
+      box-sizing: border-box !important;
+      display: block !important;
+      width: auto !important;
+      min-width: 240px !important;
+      max-width: min(360px, calc(100vw - 40px)) !important;
+      padding: 13px 42px 13px 16px !important;
+      margin: 0 !important;
+      background: rgba(20, 16, 13, 0.95) !important;
+      border: 1px solid rgba(200, 161, 90, 0.55) !important;
+      border-radius: 14px !important;
+      color: #e8dcc4 !important;
+      font: 400 14px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif !important;
+      text-align: left !important;
+      white-space: normal !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+    #nn-ios-hint.show { opacity: 1 !important; }
+    #nn-ios-hint b { color: #d8b06a; font-weight: 600; }
+    #nn-ios-hint .nn-x {
+      position: absolute; top: 8px; right: 10px;
+      width: 22px; height: 22px; line-height: 20px; text-align: center;
+      color: #8f877b; font-size: 17px; cursor: pointer; pointer-events: auto;
+    }
+  </style>
+  <script>
+    // iOS Safari「添加到主屏幕」引导：仅 iOS、非独立模式、只提示一次
+    (function () {
+      var ua = navigator.userAgent || "";
+      var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      var standalone = window.navigator.standalone === true ||
+        (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+      if (!isIOS || standalone) return;
+      try { if (localStorage.getItem("iosHintShown") === "1") return; } catch (e) {}
+      document.addEventListener("DOMContentLoaded", function () {
+        var box = document.createElement("div");
+        box.id = "nn-ios-hint";
+        box.innerHTML =
+          '<b>装到主屏幕</b>：点底部分享按钮 → 「添加到主屏幕」，即可全屏运行、无地址栏。' +
+          '<span class="nn-x" role="button" aria-label="关闭">×</span>';
+        // 注意：游戏会把 body 整体 transform:scale() 缩放，挂到 body 里会被一起缩小，
+        // 所以挂到 documentElement 上，保持真实的视口坐标。
+        document.documentElement.appendChild(box);
+        requestAnimationFrame(function () { box.classList.add("show"); });
+        var done = false;
+        function hide() {
+          if (done) return; done = true;
+          box.classList.remove("show");
+          try { localStorage.setItem("iosHintShown", "1"); } catch (e) {}
+          setTimeout(function () { box.remove(); }, 500);
+        }
+        box.querySelector(".nn-x").addEventListener("click", hide);
+        setTimeout(hide, 10000);
+      });
+    })();
+  </script>
+  <!-- ==== /PWA ==== -->
   <script type="importmap">{
   "imports": {
     "noname": "./noname.js",
@@ -79,7 +161,7 @@ await (async function() {
 	<!-- 手机端网页不显示地址栏 -->
 	<meta name="mobile-web-app-capable" content="yes" />
 	<!-- 禁止缩放 手机端全屏 -->
-	<meta name="viewport" content="user-scalable=no, viewport-fit=cover" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 	<title>无名杀</title>
 	<script>
 		"use strict";
