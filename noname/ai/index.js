@@ -3,6 +3,16 @@ import { Basic } from "./basic.js";
 import { get } from "../get/index.js";
 import { _status } from "../status/index.js";
 import { lib } from "../library/index.js";
+
+// 尝试导入SuperAI（可选依赖）
+let SuperAI = null;
+try {
+  const superModule = await import("./super.js");
+  SuperAI = superModule.SuperAI;
+} catch (e) {
+  // SuperAI模块不可用，使用默认AI
+}
+
 class AI {
   basic = new Basic();
   get get() {
@@ -102,10 +112,19 @@ let setAI = (instance) => {
   if (lib.config.dev) {
     window.nonameAI = ai;
   }
+  // 安装SuperAI增强
+  if (SuperAI && typeof SuperAI.installSuperAI === 'function') {
+    try {
+      SuperAI.installSuperAI();
+    } catch (e) {
+      console.warn('[SuperAI] 安装失败:', e);
+    }
+  }
 };
 export {
   AI,
   Basic,
   ai,
-  setAI
+  setAI,
+  SuperAI
 };
