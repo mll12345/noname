@@ -1,4 +1,5 @@
-import { Character } from "../../../../noname/library/element/index.js";
+import { lib } from "noname";
+const Character = lib.element.Character;
 
 export default {
 	gz_liqueguosi: new Character({
@@ -6,7 +7,6 @@ export default {
 		group: "qun",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["gz_xiongsuan"],
 		hasSkinInGuozhan: true,
 	}),
@@ -15,7 +15,6 @@ export default {
 		group: "qun",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["fake_yigui", "fake_jihun"],
 		hasSkinInGuozhan: true,
 	}),
@@ -24,7 +23,6 @@ export default {
 		group: "wei",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["wanwei", "gz_yuejian"],
 		dieAudios: ["ol_bianfuren"],
 	}),
@@ -33,7 +31,6 @@ export default {
 		group: "wei",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["gz_qice", "zhiyu"],
 		hasSkinInGuozhan: true,
 	}),
@@ -42,7 +39,6 @@ export default {
 		group: "wu",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["xuanlve", "yongjin"],
 		hasSkinInGuozhan: true,
 	}),
@@ -51,7 +47,6 @@ export default {
 		group: "wu",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["gz_diaodu_best", "gz_diancai"],
 		hasSkinInGuozhan: true,
 	}),
@@ -60,7 +55,6 @@ export default {
 		group: "shu",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["gz_sanyao", "gz_zhiman"],
 		dieAudios: ["xin_masu"],
 		hasSkinInGuozhan: true,
@@ -70,7 +64,6 @@ export default {
 		group: "shu",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["gzjili"], // ???
 		hasSkinInGuozhan: true,
 	}),

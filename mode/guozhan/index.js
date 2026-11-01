@@ -1,5 +1,4 @@
-import { lib, game, ui, get, ai, _status } from "../../noname.js";
-import { cast } from "../../noname/util/index.js";
+import { lib, game, ui, get, ai, _status } from "noname";
 
 import { start, startBefore, onreinit } from "./src/main.js";
 import { pack, intro, sort, yingbian } from "./src/character/index.js";
@@ -33,9 +32,9 @@ export default {
 		mode_guozhan: pack,
 	},
 	characterIntro: intro,
-	card: cast(card),
+	card,
 	guozhanPile: info.pile.normal,
-	skill: cast(skill),
+	skill,
 	translate: {
 		...translate,
 		...voices,
@@ -62,5 +61,5 @@ export default {
 	get: getPatch,
 
 	// 模式帮助
-	help: cast(help),
+	help,
 };

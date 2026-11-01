@@ -1,10 +1,4 @@
-import { lib, game, ui, get as _get, ai, _status } from "../../../../../noname.js";
-import { cast } from "../../../../../noname/util/index.js";
-import { GetGuozhan } from "../../patch/get.js";
-import { PlayerGuozhan } from "../../patch/player.js";
-
-/** @type {GetGuozhan}  */
-const get = cast(_get);
+import { lib, game, ui, get, ai, _status } from "noname";
 
 /** @type {Record<string, Skill>} */
 export default {
@@ -394,7 +388,7 @@ export default {
 						_status.characterlist.add(character);
 						game.log(player, "移去了一张", "#g“魂（" + get.translation(character) + "）”");
 						if (!player.storage.fake_yigui2) {
-							player.when({ global: "phaseBefore" }).then(() => delete player.storage.fake_yigui2);
+							player.when({ global: "phaseBefore" }).step(async () => delete player.storage.fake_yigui2);
 						}
 						player.markAuto("fake_yigui2", [get.type(result.card.name)]);
 					},
@@ -498,9 +492,7 @@ export default {
 					return player.getStorage("fake_yigui").length;
 				},
 				async cost(event, trigger, player) {
-					const {
-						result: { bool, links },
-					} = await player.chooseButton([get.prompt("fake_jihun"), '<div class="text center">弃置至多两张“魂”，然后获得等量的“魂”</div>', [player.getStorage("fake_yigui"), "character"]], [1, 2]).set("ai", button => {
+					const { bool, links } = await player.chooseButton([get.prompt("fake_jihun"), '<div class="text center">弃置至多两张“魂”，然后获得等量的“魂”</div>', [player.getStorage("fake_yigui"), "character"]], [1, 2]).set("ai", button => {
 						const getNum = character => {
 							return (
 								// @ts-expect-error 类型系统未来可期
@@ -520,7 +512,7 @@ export default {
 						};
 						// @ts-expect-error 类型系统未来可期
 						return game.countPlayer() - getNum(button.link);
-					});
+					}).forResult();
 					event.result = { bool: bool, cost_data: links };
 				},
 				async content(event, trigger, player) {
@@ -695,9 +687,7 @@ export default {
 				},
 				silent: true,
 				async content(event, _trigger, player) {
-					/** @type {PlayerGuozhan} */
-					const playerRef = cast(player);
-					await playerRef.mayChangeVice(undefined, undefined);
+					await player.mayChangeVice(undefined, undefined);
 					event.skill = "gz_qice";
 					event.trigger("skillAfter");
 				},
@@ -763,7 +753,7 @@ export default {
 		logTarget: "targets",
 		async content(event, trigger, player) {
 			const target = event.targets[0];
-			const { result } = await player.gainPlayerCard(target, "e", true);
+			const result = await player.gainPlayerCard(target, "e", true).forResult();
 
 			if (!result.bool) {
 				return;
@@ -858,9 +848,7 @@ export default {
 				await player.draw(num);
 			}
 
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
-			await playerRef.mayChangeVice(undefined, undefined);
+			await player.mayChangeVice(undefined, undefined);
 		},
 	},
 
@@ -882,9 +870,7 @@ export default {
 			trigger.cancel(undefined, undefined, undefined);
 
 			if (player.isFriendOf(trigger.player)) {
-				/** @type {PlayerGuozhan} */
-				const targetRef = cast(trigger.player);
-				await targetRef.mayChangeVice();
+				await trigger.player.mayChangeVice();
 			}
 		},
 	},

@@ -1,4 +1,4 @@
-import { lib, game, ui, get, ai, _status } from "../../../noname.js";
+import { lib, game, ui, get, ai, _status } from "noname";
 
 /** @type { importCardConfig['skill'] } */
 const skill = {
@@ -108,7 +108,7 @@ const skill = {
 			if (!skills.length) {
 				return;
 			}
-			const links = await player
+			const { links } = await player
 				.chooseButton(["选择获得一个技能", [skills, "skill"]])
 				.set("displayIndex", false)
 				.set("ai", button => {
@@ -119,7 +119,7 @@ const skill = {
 					}
 					return get.skillRank(button.link, "in");
 				})
-				.forResultLinks();
+				.forResult();
 			if (!links?.length) {
 				return;
 			}

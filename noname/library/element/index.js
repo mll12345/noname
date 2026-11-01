@@ -1,12 +1,24 @@
-export { Button } from "./button.js";
-export { Card } from "./card.js";
-export { Client } from "./client.js";
-export { Content } from "./content.js";
-export { Control } from "./control.js";
-export { Dialog } from "./dialog.js";
-export { GameEvent } from "./gameEvent.js";
-export { GameEventPromise } from "./gameEventPromise.js";
-export { NodeWS } from "./nodeWS.js";
-export { Player } from "./player.js";
-export { VCard } from "./vcard.js";
-export { Character } from "./character.js";
+import { Button } from "./button.js";
+import { Card } from "./card.js";
+import { Client } from "./client.js";
+import { Content } from "./content.js";
+import { Control } from "./control.js";
+import { Dialog } from "./dialog.js";
+import { GameEvent } from "./gameEvent.js";
+import { NodeWS } from "./nodeWS.js";
+import { Player } from "./player.js";
+import { VCard } from "./vcard.js";
+import { Character } from "./character.js";
+export {
+  Button,
+  Card,
+  Character,
+  Client,
+  Content,
+  Control,
+  Dialog,
+  GameEvent,
+  NodeWS,
+  Player,
+  VCard
+};

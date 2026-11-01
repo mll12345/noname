@@ -1,10 +1,4 @@
-import { lib, game, ui, get as _get, ai, _status } from "../../../../../noname.js";
-import { cast } from "../../../../../noname/util/index.js";
-import { GetGuozhan } from "../../patch/get.js";
-import { PlayerGuozhan } from "../../patch/player.js";
-
-/** @type {GetGuozhan}  */
-const get = cast(_get);
+import { lib, game, ui, get, ai, _status } from "noname";
 
 /** @type {Record<string, Skill>} */
 export default {
@@ -111,9 +105,7 @@ export default {
 		audio: "cunsi",
 		enable: "phaseUse",
 		filter(_event, player) {
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
-			return playerRef.checkMainSkill("gz_cunsi", false) || playerRef.checkViceSkill("gz_cunsi", false);
+			return player.checkMainSkill("gz_cunsi", false) || player.checkViceSkill("gz_cunsi", false);
 		},
 		unique: true,
 		forceunique: true,
@@ -123,13 +115,11 @@ export default {
 		derivation: "gzyongjue",
 		async content(event, _trigger, player) {
 			const { target } = event;
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
 
-			if (playerRef.checkMainSkill("gz_cunsi", false)) {
-				await playerRef.removeCharacter(0);
+			if (player.checkMainSkill("gz_cunsi", false)) {
+				await player.removeCharacter(0);
 			} else {
-				await playerRef.removeCharacter(1);
+				await player.removeCharacter(1);
 			}
 
 			target.addSkills("gzyongjue");
@@ -258,11 +248,8 @@ export default {
 			player: "phaseZhunbeiBegin",
 		},
 		init(player) {
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
-			// @ts-expect-error 类型系统未来可期
-			if (playerRef.checkViceSkill("baka_hunshang") && !playerRef.viceChanged) {
-				playerRef.removeMaxHp();
+			if (player.checkViceSkill("baka_hunshang") && !player.viceChanged) {
+				player.removeMaxHp();
 			}
 		},
 		filter(_event, player) {
@@ -365,16 +352,12 @@ export default {
 		audio: "baoling",
 		inherit: "baoling",
 		init(player) {
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
-			playerRef.checkMainSkill("fake_baoling");
+			player.checkMainSkill("fake_baoling");
 		},
 		derivation: "fake_benghuai",
 		async content(_event, _trigger, player) {
-			/** @type {PlayerGuozhan} */
-			const playerRef = cast(player);
 
-			await playerRef.removeCharacter(1);
+			await player.removeCharacter(1);
 
 			await player.gainMaxHp(3);
 			await player.recover(3);
@@ -386,19 +369,18 @@ export default {
 		audio: "benghuai",
 		inherit: "benghuai",
 		async content(event, trigger, player) {
-			const {
-				result: { control },
-			} = await player
+			const { control } = await player
 				.chooseControl("体力", "上限", "背水！")
 				.set("prompt", "崩坏：请选择一项")
 				.set("choiceList", ["失去1点体力", "减1点体力上限", "背水！依次执行前两项，然后执行一个额外的摸牌阶段"])
 				.set("ai", () => {
-					const player = get.event("player");
+					const player = get.event().player;
 					if (player.maxHp > 1 && (player.getHp() == 2 || !player.countCards("h"))) {
 						return "背水！";
 					}
 					return player.isDamaged() ? "上限" : "体力";
-				});
+				})
+				.forResult();
 			// @ts-expect-error 类型系统未来可期
 			player.popup(control);
 			game.log(player, "选择了", "#g" + control);

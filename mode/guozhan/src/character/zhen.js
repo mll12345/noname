@@ -1,4 +1,5 @@
-import { Character } from "../../../../noname/library/element/index.js";
+import { lib } from "noname";
+const Character = lib.element.Character;
 
 export default {
 	gz_dengai: new Character({
@@ -6,7 +7,6 @@ export default {
 		group: "wei",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["tuntian", "ziliang", "gz_jixi"],
 		hasSkinInGuozhan: true,
 	}),
@@ -15,7 +15,6 @@ export default {
 		group: "wei",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["fake_huyuan", "heyi"],
 		hasSkinInGuozhan: true,
 	}),
@@ -24,8 +23,7 @@ export default {
 		group: "shu",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
-		skills: ["shengxi", "gz_shoucheng"],
+		skills: ["gz_shengxi", "gz_shoucheng"],
 		hasSkinInGuozhan: true,
 	}),
 	gz_jiangwei: new Character({
@@ -33,7 +31,6 @@ export default {
 		group: "shu",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["tiaoxin", "yizhi", "tianfu"],
 		hasSkinInGuozhan: true,
 	}),
@@ -42,7 +39,6 @@ export default {
 		group: "wu",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["gz_yicheng_new"],
 		hasSkinInGuozhan: true,
 	}),
@@ -51,7 +47,6 @@ export default {
 		group: "wu",
 		hp: 4,
 		maxHp: 4,
-		hujia: 0,
 		skills: ["gz_shangyi", "niaoxiang"],
 	}),
 	gz_hetaihou: new Character({
@@ -59,7 +54,6 @@ export default {
 		group: "qun",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["zhendu", "qiluan"],
 		hasSkinInGuozhan: true,
 	}),
@@ -68,7 +62,6 @@ export default {
 		group: "qun",
 		hp: 3,
 		maxHp: 3,
-		hujia: 0,
 		skills: ["qianhuan"],
 		hasSkinInGuozhan: true,
 	}),

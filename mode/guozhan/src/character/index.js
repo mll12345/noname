@@ -1,4 +1,5 @@
-import { Character } from "../../../../noname/library/element/index.js";
+import { lib } from "noname";
+const Character = lib.element.Character;
 
 import normal from "./normal.js";
 import zhen from "./zhen.js";
@@ -6,6 +7,7 @@ import shi from "./shi.js";
 import bian from "./bian.js";
 import quan from "./quan.js";
 import yingbian from "./yingbian.js";
+import wushuang from "./wushuang.js";
 
 import restCharacter from "./rest.js";
 
@@ -16,7 +18,6 @@ export const pack = {
 		group: "wei",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -25,7 +26,6 @@ export const pack = {
 		group: "wei",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -34,7 +34,6 @@ export const pack = {
 		group: "shu",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -43,7 +42,6 @@ export const pack = {
 		group: "shu",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -52,7 +50,6 @@ export const pack = {
 		group: "wu",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -61,7 +58,6 @@ export const pack = {
 		group: "wu",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -70,7 +66,6 @@ export const pack = {
 		group: "qun",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -79,7 +74,6 @@ export const pack = {
 		group: "qun",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -88,7 +82,6 @@ export const pack = {
 		group: "jin",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -97,7 +90,6 @@ export const pack = {
 		group: "jin",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -106,7 +98,6 @@ export const pack = {
 		group: "ye",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -115,7 +106,6 @@ export const pack = {
 		group: "ye",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -124,7 +114,6 @@ export const pack = {
 		group: "key",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -133,7 +122,6 @@ export const pack = {
 		group: "key",
 		hp: 0,
 		maxHp: 0,
-		hujia: 0,
 		skills: [],
 		isUnseen: true,
 	}),
@@ -145,6 +133,7 @@ export const pack = {
 	...bian,
 	...quan,
 	...yingbian,
+	...wushuang,
 };
 
 export { default as intro } from "./intro.js";

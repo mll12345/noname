@@ -1,4 +1,4 @@
-import { lib, game, ui, get, ai, _status } from "../../../noname.js";
+import { lib, game, ui, get, ai, _status } from "noname";
 
 /** @type { importCharacterConfig['skill'] } */
 const skill = {
@@ -1063,7 +1063,9 @@ const skill = {
 			return event.num;
 		},
 		async content(event, trigger, player) {
-			const { cards } = await game.cardsGotoOrdering(get.cards(2));
+			const next = game.cardsGotoOrdering(get.cards(2));
+			await next;
+			const { cards } = next;
 			if (_status.connectMode) {
 				game.broadcastAll(function () {
 					_status.noclearcountdown = true;
@@ -1075,25 +1077,21 @@ const skill = {
 			}
 			// event.goto -> do while
 			do {
-				const {
-					result: { bool, links },
-				} =
+				const { bool, links } =
 					cards.length === 1
-						? { result: { links: cards.slice(0), bool: true } }
+						? { links: cards.slice(0), bool: true }
 						: await player.chooseCardButton("遗计：请选择要分配的牌", true, cards, [1, cards.length]).set("ai", () => {
 								if (ui.selected.buttons.length === 0) {
 									return 1;
 								}
 								return 0;
-						  });
+						  }).forResult();
 				if (!bool) {
 					return;
 				}
 				cards.removeArray(links);
 				event.togive = links.slice(0);
-				const {
-					result: { targets },
-				} = await player
+				const { targets } = await player
 					.chooseTarget("选择一名角色获得" + get.translation(links), true)
 					.set("ai", target => {
 						const att = get.attitude(_status.event.player, target);
@@ -1105,7 +1103,8 @@ const skill = {
 							return att / 100;
 						}
 					})
-					.set("enemy", get.value(event.togive[0], player, "raw") < 0);
+					.set("enemy", get.value(event.togive[0], player, "raw") < 0)
+					.forResult();
 				if (targets.length) {
 					const id = targets[0].playerid,
 						map = event.given_map;
@@ -3146,7 +3145,7 @@ const skill = {
 			const card = get.autoViewAs({ name: result.links[0].name }, cards);
 			result = await player
 				.chooseTarget(`神工：选择一个角色装备${get.translation(card)}（${get.translation(cards)}）`, (card, player, target) => {
-					return target.canEquip(get.event("cardx"), true);
+					return target.canEquip(get.event().cardx, true);
 				})
 				.set("ai", target => {
 					const { player, cardx } = get.event();
